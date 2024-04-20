@@ -9,7 +9,7 @@ pipeline {
                 script {
                     // Checkout the specified branch
                     def branchName = params.BRANCH_NAME
-                    checkout([$class: 'GitSCM', branches: [[name: branchName]], userRemoteConfigs: [[url: 'https://github.com/RAJANI9/boxfuse-sample-java-war-hello.git']]])
+                    checkout([$class: 'GitSCM', branches: [[name: branchName]], userRemoteConfigs: [[url: 'https://github.com/praveenkuku611/boxfuse-sample-java-war-hello.git']]])
                 }
             }
          }
@@ -27,18 +27,18 @@ pipeline {
         }
         stage("Deploy to Dev") {
             when {
-                expression { params.BRANCH_NAME == 'fe/dev' }
+                expression { params.BRANCH_NAME == 'dev' }
             }
             steps {
-                deployToTomcat('43.205.238.180', 'tomcat', 'tomcat', 'http://43.205.238.180:8080/manager/text', '/boxfuse-sample-java-war-hello', 'Dev')
+                deployToTomcat('15.206.171.4', 'tomcat', 'tomcat', 'http://15.206.171.4:8080/manager/text', '/boxfuse-sample-java-war-hello', 'Dev')
             }
         }
         stage("Deploy to QA") {
             when {
-                expression { params.BRANCH_NAME == 'fe/qa' }
+                expression { params.BRANCH_NAME == 'qa' }
             }
             steps {
-                deployToTomcat('13.201.47.166', 'tomcat', 'tomcat', 'http://13.201.47.166:8080/manager/text', '/boxfuse-sample-java-war-hello', 'QA')
+                deployToTomcat('3.110.132.240', 'tomcat', 'tomcat', 'http://3.110.132.240:8080/manager/text', '/boxfuse-sample-java-war-hello', 'QA')
             }
         }
         stage("Deploy to Prod") {
@@ -49,10 +49,10 @@ pipeline {
                 input(message: "Do you want to proceed to PROD?", ok: "Proceed") // Approval step
 
                 // Deploy to PROD server after approval
-                deployToTomcat('65.2.187.108', 'tomcat', 'tomcat', 'http://65.2.187.108:8080/manager/text', '/boxfuse-sample-java-war-hello', 'Prod')
+                deployToTomcat('3.109.182.231', 'tomcat', 'tomcat', 'http://3.109.182.231:8080/manager/text', '/boxfuse-sample-java-war-hello', 'Prod')
                 
                 // Send Slack notification
-                slackSend(channel: '7-30am-cloud-devops-batch', message: "Deployment to PROD has been approved by manager.")
+                slackSend(channel: 'devops_team', message: "Deployment to PROD has been approved by manager.")
             }
         }
     }
